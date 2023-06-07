@@ -26,7 +26,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $user = User::create([
@@ -42,5 +42,38 @@ class AuthController extends Controller
             'firstName' => $user->first_name,
             'lastName' => $user->last_name
         ]);
+    }
+
+    public function showLogin()
+    {
+        return view('login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = [
+            'login' => $request->login,
+            'password' => $request->password
+        ];
+
+        $validator = Validator::make($credentials, [
+            'login' => ['required'],
+            'password' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            return response()->json([
+                'firstName' => $user->first_name,
+                'lastName' => $user->last_name
+            ]);
+        } else {
+            return response()->json(['message' => 'Invalid credentials'], 400);
+        }
     }
 }
