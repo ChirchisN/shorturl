@@ -18,6 +18,11 @@ body {
   max-width: 1200px;
 }
 
+.logo {
+  font-size: 48px;
+  font-weight: 700;
+}
+
 //----Header----
 nav {
   padding-right: 25px;
@@ -33,10 +38,6 @@ nav {
     color: $color-gray-dark;
   }
 
-  a.logo {
-    font-size: 48px;
-    font-weight: 700;
-  }
 
   a.logo:hover {
     color: $color-blue;

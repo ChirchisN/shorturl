@@ -10,6 +10,11 @@ body {
   max-width: 1200px;
 }
 
+.logo {
+  font-size: 48px;
+  font-weight: 700;
+}
+
 nav {
   padding-right: 25px;
   border-bottom: 1px solid #b6b6b6;
@@ -21,10 +26,6 @@ nav a {
 }
 nav .menu a:hover {
   color: #4a5568;
-}
-nav a.logo {
-  font-size: 48px;
-  font-weight: 700;
 }
 nav a.logo:hover {
   color: #0186da;

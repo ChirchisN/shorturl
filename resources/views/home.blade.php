@@ -17,7 +17,7 @@
             </div>
             <div class="menu mr-5">
                 <a href="#" class="text-decoration-none">Sign In</a>
-                <a href="#" class="text-decoration-none">Sign Up</a>
+                <a href="{{route('showRegistration')}}" class="text-decoration-none">Sign Up</a>
                 <a href="#" class="text-decoration-none">Logout</a>
             </div>
         </nav>
