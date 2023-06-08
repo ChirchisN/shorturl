@@ -18,3 +18,4 @@ Route::get('/registration', [\App\Http\Controllers\AuthController::class, 'showR
 Route::post('/registration', [\App\Http\Controllers\AuthController::class, 'registration'])->name('registration');
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
+Route::get('/user', [\App\Http\Controllers\UserController::class, 'user'])->name('user');
