@@ -27,12 +27,14 @@
     <section class="convert_link d-flex flex-column justify-content-center align-items-center">
         <h1 class="pt-3 mb-4">Paste the URL to be shortened</h1>
         <form class="d-flex flex-column justify-content-center align-items-center">
+            @csrf
             <label>Destination</label>
-            <input class="mb-3" type="text" name="link" placeholder="Enter the link here ...">
+            <input class="mb-3" type="text" name="link" id="link" placeholder="Enter the link here ...">
             <label>Custom link (optional)</label>
-            <input class="mb-3" type="text" name="link">
-            <button type="button" class="btn btn-primary btn-lg">Shorten URL</button>
+            <input class="mb-3" type="text" name="short_code" id="customLink">
+            <button type="button" class="btn btn-primary btn-lg" id="linkBtn">Shorten URL</button>
         </form>
+        <div class="short_link mt-3" id="createdShortLink"></div>
     </section>
 </div>
 
@@ -42,24 +44,62 @@
 </script>
 
 <script>
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/user');
-    xhr.send();
-
     let userSpan = document.getElementById('user');
     let signInLink = document.getElementById('signIn');
     let signUpLink = document.getElementById('signUp');
     let logoutLink = document.getElementById('logout');
+    let linkInput = document.getElementById('link');
+    let customLinkInput = document.getElementById('customLink');
+    let linkButton = document.getElementById('linkBtn');
+    let tokenInput = document.querySelector('input[name="_token"]');
+    let createdShortLinkDiv = document.getElementById('createdShortLink');
 
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            let response = JSON.parse(xhr.response);
-            userSpan.innerText = response['firstName'] + ' ' + response['lastName'];
-            signInLink.style.display = "none";
-            signUpLink.style.display = "none";
-            logoutLink.style.display = "inline";
+    function loadCurrentUserDetails() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/user');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                let response = JSON.parse(xhr.response);
+                userSpan.innerText = response['firstName'] + ' ' + response['lastName'];
+                signInLink.style.display = "none";
+                signUpLink.style.display = "none";
+                logoutLink.style.display = "inline";
+            }
         }
     }
+
+    loadCurrentUserDetails();
+
+    linkButton.addEventListener('click', function () {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/link');
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        let data = JSON.stringify(
+            {
+                'link': linkInput.value,
+                'short_code': customLinkInput.value,
+                '_token': tokenInput.value
+            }
+        );
+
+        xhr.send(data);
+
+        xhr.onload = function () {
+            let response = JSON.parse(xhr.response);
+
+            if (xhr.status === 200) {
+                linkInput.value = '';
+                customLinkInput.value = '';
+                createdShortLinkDiv.style.display = 'inline-block';
+                createdShortLinkDiv.innerText = response['link'];
+            } else {
+                alert(response['message']);
+            }
+        }
+    });
+
 </script>
 </body>
 </html>

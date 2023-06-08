@@ -19,3 +19,4 @@ Route::post('/registration', [\App\Http\Controllers\AuthController::class, 'regi
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/user', [\App\Http\Controllers\UserController::class, 'user'])->name('user');
+Route::post('/link', [\App\Http\Controllers\LinkController::class, 'create'])->name('link');

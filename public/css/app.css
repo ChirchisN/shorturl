@@ -46,5 +46,9 @@ nav a.logo:hover {
   background-color: #0186da;
   font-size: 24px;
 }
+.convert_link .short_link {
+  display: none;
+  font-size: 24px;
+}
 
 /*# sourceMappingURL=app.css.map */
