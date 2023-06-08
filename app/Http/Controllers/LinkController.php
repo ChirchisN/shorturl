@@ -20,7 +20,10 @@ class LinkController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors(), 'message' => 'Empty field!'], 400);
+                return response()->json([
+                    'errors' => $validator->errors(),
+                    'message' => 'Empty field or link already exists!'
+                ], 400);
             }
 
             $shortCode = !empty($request['short_code']) ? $request['short_code'] : uniqid();
@@ -48,5 +51,25 @@ class LinkController extends Controller
         }
 
         abort(404);
+    }
+
+    public function getLinks()
+    {
+        if (Auth::check()) {
+            $userRole = Auth::getUser()->role;
+            $userId = Auth::getUser()->id;
+
+            if ($userRole == 'USER') {
+                $links = Link::where(['user_id' => $userId])->get()->sortByDesc("id");
+
+                return response()->json($links);
+            } elseif ($userRole == 'ADMIN') {
+                $links = Link::all()->sortByDesc("id");
+
+                return response()->json($links);
+            }
+        }
+
+        return response()->json();
     }
 }

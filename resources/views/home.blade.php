@@ -38,6 +38,12 @@
     </section>
 </div>
 
+<section class="container" id="containerLinks" style="display: none">
+    <hr>
+    <h3>Links</h3>
+    <div id="links"></div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous">
@@ -53,6 +59,8 @@
     let linkButton = document.getElementById('linkBtn');
     let tokenInput = document.querySelector('input[name="_token"]');
     let createdShortLinkDiv = document.getElementById('createdShortLink');
+    let containerLinksDiv = document.getElementById('containerLinks');
+    let linksDiv = document.getElementById('links');
 
     function loadCurrentUserDetails() {
         let xhr = new XMLHttpRequest();
@@ -65,6 +73,8 @@
                 signInLink.style.display = "none";
                 signUpLink.style.display = "none";
                 logoutLink.style.display = "inline";
+
+                loadLinks();
             }
         }
     }
@@ -100,6 +110,26 @@
         }
     });
 
+
+    function loadLinks() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/links');
+        xhr.send();
+        xhr.onload = function () {
+            let response = JSON.parse(xhr.response);
+
+            containerLinksDiv.style.display = 'block';
+
+            for (key in response) {
+                let link = response[key];
+                linksDiv.innerHTML += '<div class="d-flex flex-column mb-3 justify-content-between">' +
+                    '        <div class="me-3">Original URL: <span id="originalLink" class="fst-italic">' + link['original_link'] + '</span></div>' +
+                    '        <div class="me-3">Short URL: <span id="shortLink" class="fst-italic">' + link['short_code'] + '</span></div>' +
+                    '        <div class="me-3">Redirected number: <span id="count" class="fst-italic">' + link['redirected_count'] + '</span></div>' +
+                    '    </div>';
+            }
+        }
+    }
 </script>
 </body>
 </html>
