@@ -130,6 +130,19 @@
             }
         }
     }
+
+    logoutLink.addEventListener('click', function () {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/logout');
+        xhr.send();
+        xhr.onload = function () {
+            signInLink.style.display = 'inline';
+            signUpLink.style.display = 'inline';
+            userSpan.style.display = 'none';
+            logoutLink.style.display = 'none';
+            containerLinksDiv.style.display = 'none';
+        }
+    });
 </script>
 </body>
 </html>

@@ -21,4 +21,5 @@ Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->n
 Route::get('/user', [\App\Http\Controllers\UserController::class, 'user'])->name('user');
 Route::post('/link', [\App\Http\Controllers\LinkController::class, 'create'])->name('link');
 Route::get('/lk/{shortCode}', [\App\Http\Controllers\LinkController::class, 'redirect']);
-Route::get('/links',[\App\Http\Controllers\LinkController::class, 'getLinks']);
+Route::get('/links', [\App\Http\Controllers\LinkController::class, 'getLinks']);
+Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
