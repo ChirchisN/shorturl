@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,7 +20,7 @@ class LinkController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors(), 'message'=>'Empty field!'], 400);
+                return response()->json(['errors' => $validator->errors(), 'message' => 'Empty field!'], 400);
             }
 
             $shortCode = !empty($request['short_code']) ? $request['short_code'] : uniqid();
@@ -32,9 +31,22 @@ class LinkController extends Controller
                 'short_code' => $shortCode
             ]);
 
-            return response()->json(['link' => url(route('home')).'/link/'. $shortCode]);
+            return response()->json(['link' => url(route('home')) . '/lk/' . $shortCode]);
         } else {
             return response()->json(['message' => 'User is not logged'], 400);
         }
+    }
+
+    public function redirect($shortCode)
+    {
+        $link = Link::where('short_code', $shortCode)->first();
+
+        if (!empty($link)) {
+            $link->redirected_count += 1;
+            $link->save();
+            return redirect($link->original_link);
+        }
+
+        abort(404);
     }
 }
