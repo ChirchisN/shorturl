@@ -15,14 +15,14 @@ class LinkController extends Controller
         if (Auth::check()) {
 
             $validator = Validator::make($request->all(), [
-                'link' => 'required',
+                'link' => ['required', 'url'],
                 'short_code' => ['max:50', 'unique:links']
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'errors' => $validator->errors(),
-                    'message' => 'Empty field or link already exists!'
+                    'message' => 'Empty field, link already exists or URL is not valid!'
                 ], 400);
             }
 
