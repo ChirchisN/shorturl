@@ -60,11 +60,11 @@ class LinkController extends Controller
             $userId = Auth::getUser()->id;
 
             if ($userRole == 'USER') {
-                $links = Link::where(['user_id' => $userId])->get()->sortByDesc("id");
+                $links = Link::where(['user_id' => $userId])->orderBy('id', 'desc')->get();
 
                 return response()->json($links);
             } elseif ($userRole == 'ADMIN') {
-                $links = Link::all()->sortByDesc("id");
+                $links = Link::orderBy('id', 'desc')->get();
 
                 return response()->json($links);
             }
