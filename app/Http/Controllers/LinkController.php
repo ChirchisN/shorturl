@@ -28,13 +28,20 @@ class LinkController extends Controller
 
             $shortCode = !empty($request['short_code']) ? $request['short_code'] : uniqid();
 
-            Link::create([
+            $link = Link::create([
                 'user_id' => Auth::id(),
                 'original_link' => $request['link'],
                 'short_code' => $shortCode
             ]);
 
-            return response()->json(['link' => url(route('home')) . '/lk/' . $shortCode]);
+            $adjustedLink = [
+                'id' => $link['id'],
+                'original_link' => $link['original_link'],
+                'short_link' => url(route('home')) . '/lk/' . $link['short_code'],
+                'redirected_count' => $link['redirected_count']
+            ];
+
+            return response()->json($adjustedLink);
         } else {
             return response()->json(['message' => 'User is not logged'], 400);
         }
@@ -61,15 +68,32 @@ class LinkController extends Controller
 
             if ($userRole == 'USER') {
                 $links = Link::where(['user_id' => $userId])->orderBy('id', 'desc')->get();
+                $adjustedLinks = $this->adjustLinks($links);
 
-                return response()->json($links);
+                return response()->json($adjustedLinks);
             } elseif ($userRole == 'ADMIN') {
                 $links = Link::orderBy('id', 'desc')->get();
+                $adjustedLinks = $this->adjustLinks($links);
 
-                return response()->json($links);
+                return response()->json($adjustedLinks);
             }
         }
 
-        return response()->json();
+        return response()->json([]);
+    }
+
+    private function adjustLinks($links)
+    {
+        $adjustedLinks = [];
+        foreach ($links as $link) {
+            $adjustedLinks[] = [
+                'id' => $link['id'],
+                'original_link' => $link['original_link'],
+                'short_link' => url(route('home')) . '/lk/' . $link['short_code'],
+                'redirected_count' => $link['redirected_count']
+            ];
+        }
+
+        return $adjustedLinks;
     }
 }

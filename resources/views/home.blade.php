@@ -103,7 +103,13 @@
                 linkInput.value = '';
                 customLinkInput.value = '';
                 createdShortLinkDiv.style.display = 'inline-block';
-                createdShortLinkDiv.innerText = response['link'];
+                createdShortLinkDiv.innerText = response['short_link'];
+
+                linksDiv.innerHTML = '<div class="d-flex flex-column mb-3 justify-content-between">' +
+                    '        <div class="me-3">Original URL: <span id="originalLink" class="fst-italic">' + response['original_link'] + '</span></div>' +
+                    '        <div class="me-3">Short URL: <span id="shortLink" class="fst-italic">' + response['short_link'] + '</span></div>' +
+                    '        <div class="me-3">Redirected number: <span id="count" class="fst-italic">' + 0 + '</span></div>' +
+                    '    </div>' + linksDiv.innerHTML;
             } else {
                 alert(response['message']);
             }
@@ -124,7 +130,7 @@
                 let link = response[key];
                 linksDiv.innerHTML += '<div class="d-flex flex-column mb-3 justify-content-between">' +
                     '        <div class="me-3">Original URL: <span id="originalLink" class="fst-italic">' + link['original_link'] + '</span></div>' +
-                    '        <div class="me-3">Short URL: <span id="shortLink" class="fst-italic">' + link['short_code'] + '</span></div>' +
+                    '        <div class="me-3">Short URL: <span id="shortLink" class="fst-italic">' + link['short_link'] + '</span></div>' +
                     '        <div class="me-3">Redirected number: <span id="count" class="fst-italic">' + link['redirected_count'] + '</span></div>' +
                     '    </div>';
             }
